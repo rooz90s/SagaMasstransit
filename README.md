@@ -39,8 +39,8 @@ namespace HerdManagement.BusComponents.SAGAStateMachine.State
 
 ```
 
-### State Machine Instance Implementation
-State Machine Instance is the operation center of certained transaction which orchestrate the events and update defined states. here is the begining setup as follow.
+### State Machine Instance initiation Implementation
+State Machine Instance is the operation center of certained transaction which orchestrate the events and update the defined states based on behaviour. here is the begining setup as follow.
 
 ```
 using HerdManagement.BusComponents.SAGAStateMachine.State;
@@ -67,4 +67,36 @@ namespace HerdManagement.BusComponents.SAGAStateMachine
 
     }
 }
+```
+
+### Events and Behaviour Implementation
+An event is something that happened which may result in a state change. After setting up State and State machine instance we continue implementing transaction scenario by defining Events and after Events update changes based on the state different behaviour may take place which is nothing but the Evenets fired as consiquence of the previous state changes if there any.<br/>
+Speaking of Update Herd Groups we have scenario as <br/>
+
+- (Event) Update Group in the Herd Management service => (State) the state is changed into **HerdManagementUpdateCompleted**.
+- (behaviour) after state is changed to  **HerdManagementUpdateCompleted** then (Event) Update Group in GlobalAnalytics Service => (State) The State is Changed into **GlobalAnalyticsUpdateCompleted**.
+
+
+**Note**: we have to consider that exceptions or fault may be happen during the Transaction that brings other scenario and behaviours to our conserns such as recover and rollback operations to handdle the faults.
+
+<br/>
+
+
+#### 1. Define Event Message Contract<br/>
+Event contracts hold the properties required to handle the operation. In this case these properties are passed to the consumer to do the job.<br/>
+
+1.1. HerdManagement Service Group Update Event Contract.
+
+```
+namespace EventBus.Contracts.HerdManagement.EventMessage
+{
+    public interface IUpdateHerdGroup
+    {
+        public Guid CorrelationId { get; set; }
+        public string GroupId { get; set; }
+        public string GroupTitle { get; set; }
+        public string GroupDescription { get; set; }
+    }
+}
+
 ```
