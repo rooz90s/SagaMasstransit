@@ -76,11 +76,16 @@ Speaking of Update Herd Groups we have scenario as <br/>
 - (Event) Update Group in the Herd Management service => (State) the state is changed into **HerdManagementUpdateCompleted**.
 - (behaviour) after state is changed to  **HerdManagementUpdateCompleted** then (Event) Update Group in GlobalAnalytics Service => (State) The State is Changed into **GlobalAnalyticsUpdateCompleted**.
 
+![Activitydiagram2](https://user-images.githubusercontent.com/105317212/209435946-4c5da27a-bae0-4cc2-98ea-5582cb1eb219.png)
 
-**Note**: we have to consider that exceptions or fault may be happen during the Transaction that brings other scenario and behaviours to our conserns such as recover and rollback operations to handdle the faults.
+we have to consider that exceptions or fault may be happen during the Transaction that brings other scenario and behaviours to our conserns such as recover and rollback operations to handdle the faults.<br/>
+
+#### Slip Routing
+Masstransit Slip Routing is responsible for Chained event of a transaction that capable us manage and orchestrate the transaction or part of chained events as well as handle fault happening during transaction as it could fire compensate event to do that.
 
 <br/>
 
+### Implementation Steps
 
 #### 1. Define Event Message Contract<br/>
 Event contracts hold the properties required to handle the operation. In this case these properties are passed to the consumer to do the job.<br/>
@@ -100,3 +105,10 @@ namespace EventBus.Contracts.HerdManagement.EventMessage
 }
 
 ```
+
+2. Define and Implemet Slip Routing
+
+As mentioned Masstransit Slip Routing is responsible for orchestrate the chained events that here are defined in terms of Activities.
+2.1 Define Herd Management Group Update Activities
+
+
